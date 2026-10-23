@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects | Yueqi Lyu</title>
+  <meta name="description" content="Selected projects in phishing detection, news aggregation and network analysis by Yueqi Lyu.">
+  <meta name="theme-color" content="#182c35">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html" aria-label="Yueqi Lyu, home"><span class="brand-mark" aria-hidden="true">YL</span>Yueqi Lyu</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation"><ul class="nav-list"><li><a href="index.html">Home</a></li><li><a href="projects.html" aria-current="page">Projects</a></li><li><a href="network.html">Network notes</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
+  </div>
+</header>
+<main class="wrap" id="main">
+
+<header class="page-heading"><p class="eyebrow">Selected projects</p><h1>Questions I am<br>working on.</h1><p class="lead">Research and development across machine learning, practical software and computer networks.</p></header>
+<div class="filters" role="group" aria-label="Filter projects by topic" hidden>
+  <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">All projects</button>
+  <button class="filter-btn" type="button" data-filter="ml" aria-pressed="false">Machine learning</button>
+  <button class="filter-btn" type="button" data-filter="software" aria-pressed="false">Software</button>
+  <button class="filter-btn" type="button" data-filter="networks" aria-pressed="false">Networking</button>
+</div>
+<p class="sr-only" id="filter-status" role="status" aria-live="polite"></p>
+<article class="project-detail" id="phishing" data-category="ml"><div><p class="index">01 / Research</p><h2>Phishing<br>detection</h2><span class="tag">Classification</span><span class="tag">Evaluation</span></div><div><p class="detail-label">The question</p><h3>How can we evaluate an email classifier reliably?</h3><p>I have worked on a research manuscript about phishing detection, focusing on data preparation, feature construction and classification models.</p><ul><li>Consider how text, addresses and URLs can describe an email.</li><li>Keep training decisions separate from final test evaluation.</li><li>Use precision, recall and F1 to discuss different kinds of classification errors.</li></ul><p class="muted">My main interest is in reproducible experiments and understanding why a model's performance changes.</p></div></article>
+<article class="project-detail" id="news" data-category="software"><div><p class="index">02 / In progress</p><h2>News<br>aggregator</h2><span class="tag">Software</span><span class="tag">Information</span></div><div><p class="detail-label">The goal</p><h3>Make information easier to explore.</h3><p>My current software project is a news aggregator. I am interested in how news from different sources can be collected, organised and presented in a useful interface.</p><ul><li>Structure information so that readers can explore related material.</li><li>Keep source information visible and traceable.</li><li>Connect data processing with a clear user experience.</li></ul><p class="muted">This entry describes an ongoing project; it does not claim a public release.</p></div></article>
+<article class="project-detail" id="networking" data-category="networks software"><div><p class="index">03 / Coursework</p><h2>Personal site &amp;<br>network analysis</h2><span class="tag">CSI205TC</span><span class="tag">Web</span></div><div><p class="detail-label">The connection</p><h3>Follow a web request through the protocol stack.</h3><p>This website is the static web component of my CSI205TC Question 2 work. It uses HTML for content, CSS for presentation and JavaScript for a few accessible interactions.</p><ul><li>Publish the website using GitHub Pages.</li><li>Record DNS answers, ping observations and a traceroute after deployment.</li><li>Use Wireshark and browser developer tools to relate packets to web requests.</li></ul><p class="callout">The network notes explain the method. Measured results belong to the coursework report and must come from an actual test session.</p><a href="network.html">Explore the protocol notes ↗</a></div></article>
+<section class="section"><p class="muted">You can find my public GitHub profile at <a href="https://github.com/Yuelyu24">github.com/Yuelyu24</a>.</p></section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>&copy; 2026 Yueqi Lyu. Personal academic website.</p>
+    <div class="footer-links"><a href="https://github.com/Yuelyu24">GitHub</a><a href="contact.html">Contact</a><a href="network.html">CSI205TC notes</a></div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Network notes | Yueqi Lyu</title>
+  <meta name="description" content="A CSI205TC learning notebook on DNS, TCP, HTTPS, TLS and practical network analysis.">
+  <meta name="theme-color" content="#182c35">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html" aria-label="Yueqi Lyu, home"><span class="brand-mark" aria-hidden="true">YL</span>Yueqi Lyu</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation"><ul class="nav-list"><li><a href="index.html">Home</a></li><li><a href="projects.html">Projects</a></li><li><a href="network.html" aria-current="page">Network notes</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
+  </div>
+</header>
+<main class="wrap" id="main">
+
+<header class="page-heading"><p class="eyebrow">CSI205TC / Week 6 notebook</p><h1>From a URL to<br>a secure page.</h1><p class="lead">Connecting the network layers to the protocols behind a personal website.</p></header>
+<p class="callout">These are learning notes and testing instructions. They do not contain measured IP addresses, latency values or packet-capture results.</p>
+<section class="section" aria-labelledby="journey-title"><p class="eyebrow">01 / A typical HTTPS connection over TCP</p><h2 id="journey-title">Four jobs behind one page.</h2>
+  <div class="protocol-grid">
+    <article class="protocol-step"><p class="number">01 / NAME</p><h3>DNS</h3><p>The client obtains address information for a hostname. A cached result can avoid a new visible DNS exchange.</p></article>
+    <article class="protocol-step"><p class="number">02 / CONNECT</p><h3>TCP</h3><p>A new TCP connection normally begins with SYN, SYN-ACK and ACK. TCP supplies reliable, ordered byte delivery.</p></article>
+    <article class="protocol-step"><p class="number">03 / PROTECT</p><h3>TLS</h3><p>The client and server establish protected communication. Certificate validation helps the browser authenticate the server.</p></article>
+    <article class="protocol-step"><p class="number">04 / REQUEST</p><h3>HTTP</h3><p>The browser requests the document and its resources. HTTPS protects these HTTP messages in transit.</p></article>
+  </div>
+  <p class="muted">This is a simplified first-connection example. Connections can be reused. HTTP/3 uses QUIC over UDP, with TLS 1.3 integrated into QUIC, so a TCP handshake is not part of that connection. Record the protocol actually observed.</p>
+  <div class="table-scroll"><table><caption>The five-layer model revisited</caption><thead><tr><th scope="col">Layer</th><th scope="col">Role in web access</th><th scope="col">Examples</th></tr></thead><tbody>
+  <tr><td>Application</td><td>Names, requests and responses</td><td>DNS, HTTP</td></tr><tr><td>Transport</td><td>Communication between processes</td><td>TCP; UDP carrying QUIC for HTTP/3</td></tr><tr><td>Network</td><td>Addressing and forwarding across networks</td><td>IPv4, IPv6</td></tr><tr><td>Link</td><td>Delivery across the local link</td><td>Ethernet, Wi-Fi</td></tr><tr><td>Physical</td><td>Signals that carry bits</td><td>Radio, electrical or optical signals</td></tr>
+  </tbody></table></div><p class="muted">TLS is a security protocol above TCP in the HTTPS-over-TCP stack; it is not an additional layer in the five-layer teaching model.</p>
+</section>
+<section class="section rule-top" aria-labelledby="security-title"><p class="eyebrow">02 / Security in practice</p><h2 id="security-title">What protection means.</h2><div class="concept-grid">
+  <article class="concept"><h3>Confidentiality</h3><p>Encryption protects message contents from an observer who does not have the required secrets. A normal HTTPS capture does not expose the page body as readable HTTP.</p></article>
+  <article class="concept"><h3>Authentication</h3><p>The browser checks the server's certificate and hostname. A valid certificate identifies the endpoint for that name; it does not certify that the page's claims are true.</p></article>
+  <article class="concept"><h3>Integrity</h3><p>Cryptographic protection detects tampering with protected messages. An ordinary transport checksum is not a cryptographic authenticity guarantee.</p></article>
+  <article class="concept"><h3>Availability</h3><p>A service must remain reachable to be useful. Encryption alone cannot guarantee availability or prevent every denial-of-service attack.</p></article>
+</div><p class="muted">Week 6 also introduces signatures, certificate authorities, IPsec and firewall filtering. The most direct connection to this website is HTTPS and TLS.</p></section>
+<section class="section rule-top" aria-labelledby="measure-title"><p class="eyebrow">03 / Observe, then explain</p><h2 id="measure-title">A small measurement toolkit.</h2><p>For the intended user site, the hostname is <code>yuelyu24.github.io</code>. A hostname is different from a full URL such as <code>https://yuelyu24.github.io/</code>. Run these commands only after deployment.</p>
+<div class="command-block"><p class="command-label">DNS lookup · macOS, Linux or Windows</p><pre><code id="dns-command">nslookup yuelyu24.github.io</code></pre><button class="copy-button" type="button" data-copy-target="dns-command" hidden>Copy command</button><span class="copy-status" role="status" aria-live="polite"></span></div>
+<div class="table-scroll"><table><caption>Use the command for your own operating system</caption><thead><tr><th scope="col">Test</th><th scope="col">macOS / Linux</th><th scope="col">Windows</th></tr></thead><tbody><tr><td>Ping: four probes</td><td><code>ping -c 4 yuelyu24.github.io</code></td><td><code>ping -n 4 yuelyu24.github.io</code></td></tr><tr><td>Route</td><td><code>traceroute yuelyu24.github.io</code></td><td><code>tracert yuelyu24.github.io</code></td></tr></tbody></table></div>
+<p class="muted">The command-line tools run on your computer. This static page does not send ICMP ping probes or perform traceroute from the browser.</p>
+<details><summary>What should a DNS result tell me?</summary><p>Distinguish the resolver's address from the website's returned addresses. Record any A and AAAA answers, the query time and the address the browser actually used. Shared hosting can return several addresses, and a later answer can differ.</p></details>
+<details><summary>What does a ping time measure?</summary><p>It is a round-trip observation for an ICMP Echo exchange, not the full page-load time. Report sent and received counts, loss and available RTT statistics. If all probes time out, report the timeout; it does not by itself prove that HTTPS is unavailable.</p></details>
+<details><summary>How should I interpret traceroute?</summary><p>It probes with increasing TTL or Hop Limit to reveal responding hops. An asterisk means no response arrived within that probe's wait period. Filtering, rate limits and routing changes can make the observed route incomplete.</p></details>
+<details><summary>What should I look for in Wireshark?</summary><p>Start the capture before opening the site. Use the active interface, identify the server address and inspect the relevant stream. For a TCP-based HTTPS session, look for the handshake and TLS traffic. HTTP/3 may appear as QUIC over UDP instead. Browser developer tools can show HTTP request details that are encrypted in the packet capture.</p></details>
+</section>
+<section class="section rule-top" aria-labelledby="stream-title"><p class="eyebrow">04 / A connection to streaming research</p><div class="two-col"><div><h2 id="stream-title">Networks also shape<br>video quality.</h2></div><div><p>Week 6 discusses DASH: a video is divided into segments, and the client selects representations as conditions change. Adaptive bitrate decisions balance visual quality, stalls and changes in quality.</p><p class="muted">The lecture introduces Pensieve as a learning-based approach to adaptive bitrate selection, and DAVE as work on dynamic encoding for real-time video. This website is a static portfolio; it does not implement either streaming system.</p></div></div></section>
+<section class="section rule-top" aria-labelledby="references-title"><p class="eyebrow">Sources &amp; further reading</p><h2 id="references-title">Read the underlying material.</h2><ol class="references">
+  <li>Siqi Huang, <cite>Week 6: Network application and research</cite>, CSI205TC, 20 October 2026. Network layers: p. 2; security and TLS: pp. 3–39; streaming: pp. 41–54.</li>
+  <li><cite>CSI205TC Lab 4</cite>: capture interfaces, display filters and TCP streams. <cite>Week 3: Transport Layer</cite> and <cite>Week 4: Network Layer</cite>: supporting protocol concepts.</li>
+  <li><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site">GitHub Docs: Creating a GitHub Pages site</a>.</li>
+  <li><a href="https://www.rfc-editor.org/rfc/rfc8446">RFC 8446: The Transport Layer Security (TLS) Protocol Version 1.3</a>.</li>
+  <li><a href="https://www.rfc-editor.org/rfc/rfc9114">RFC 9114: HTTP/3</a>.</li>
+  <li><a href="https://www.wireshark.org/docs/wsug_html_chunked/">Wireshark User's Guide</a>.</li>
+</ol></section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>&copy; 2026 Yueqi Lyu. Personal academic website.</p>
+    <div class="footer-links"><a href="https://github.com/Yuelyu24">GitHub</a><a href="contact.html">Contact</a><a href="network.html">CSI205TC notes</a></div>
+  </div>
+</footer>
+</body>
+</html>
